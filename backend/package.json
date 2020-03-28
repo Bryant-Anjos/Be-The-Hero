@@ -1,0 +1,22 @@
+{
+  "name": "be-the-hero",
+  "version": "0.1.0",
+  "description": "Project done at 11th omnistack week of Rocketseat",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.ts"
+  },
+  "author": "Bryant Moreira dos Anjos",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "knex": "^0.20.13",
+    "sqlite3": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.3",
+    "nodemon": "^2.0.2",
+    "sucrase": "^3.12.1",
+    "typescript": "^3.8.3"
+  }
+}
