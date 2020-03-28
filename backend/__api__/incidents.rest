@@ -13,10 +13,8 @@ Authorization: {{ong_id}}
 }
 
 ### List
-GET {{base_url}}/incidents HTTP/1.1
-Content-Type: application/json
+GET {{base_url}}/incidents?page=1 HTTP/1.1
 
 ### Delete
 DELETE {{base_url}}/incidents/1 HTTP/1.1
-Content-Type: application/json
 Authorization: {{ong_id}}

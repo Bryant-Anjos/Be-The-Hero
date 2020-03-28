@@ -1,8 +1,9 @@
-import { Request, Response } from 'express'
+import { Request, Response, response } from 'express'
 
 import connection from '../../database/connection'
 
 import Incident from '../interfaces/Incident'
+import Ong from '../interfaces/Ong'
 
 class IncidentsController {
   async create(req: Request, res: Response): Promise<Response<{ id: string }>> {
@@ -20,7 +21,24 @@ class IncidentsController {
   }
 
   async index(req: Request, res: Response): Promise<Response<Incident[]>> {
-    const incidents = await connection<Incident>('incidents').select('*')
+    const { page = 1 }: { page: number } = req.query
+
+    const [count] = await connection<Incident>('incidents').count()
+
+    res.header('X-Total-Count', count['count(*)'])
+
+    const incidents = await connection<Incident>('incidents')
+      .join<Ong>('ongs', 'ongs.id', '=', 'incidents.ong_id')
+      .limit(5)
+      .offset((page - 1) * 5)
+      .select([
+        'incidents.*',
+        'ongs.name',
+        'ongs.email',
+        'ongs.whatsapp',
+        'ongs.city',
+        'ongs.uf',
+      ])
 
     return res.json(incidents)
   }
