@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, Response, response } from 'express'
 import crypto from 'crypto'
 
 import connection from '../../database/connection'
@@ -6,7 +6,7 @@ import connection from '../../database/connection'
 import Ong from '../interfaces/Ong'
 
 class OngsController {
-  async store(req: Request, res: Response) {
+  async store(req: Request, res: Response): Promise<Response<{ id: string }>> {
     const { name, email, whatsapp, city, uf }: Ong = req.body
 
     const id = crypto.randomBytes(8).toString('HEX')
@@ -21,6 +21,12 @@ class OngsController {
     })
 
     return res.json({ id })
+  }
+
+  async index(req: Request, res: Response): Promise<Response<Ong[]>> {
+    const ongs: Ong[] = await connection('ongs').select('*')
+
+    return res.json(ongs)
   }
 }
 
