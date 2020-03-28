@@ -6,7 +6,7 @@ import connection from '../../database/connection'
 import Ong from '../interfaces/Ong'
 
 class OngsController {
-  async store(req: Request, res: Response): Promise<Response<{ id: string }>> {
+  async create(req: Request, res: Response): Promise<Response<{ id: string }>> {
     const { name, email, whatsapp, city, uf }: Ong = req.body
 
     const id = crypto.randomBytes(8).toString('HEX')
@@ -24,7 +24,7 @@ class OngsController {
   }
 
   async index(req: Request, res: Response): Promise<Response<Ong[]>> {
-    const ongs: Ong[] = await connection('ongs').select('*')
+    const ongs = await connection<Ong>('ongs').select('*')
 
     return res.json(ongs)
   }
