@@ -2,6 +2,7 @@ import React from 'react'
 import { Image, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Feather'
+import Mailer from 'react-native-mail'
 
 import {
   Container,
@@ -24,6 +25,20 @@ const Detail = () => {
 
   function navigateBack() {
     navigation.goBack()
+  }
+
+  function sendMail() {
+    Mailer.mail(
+      {
+        subject: 'Mensagem de teste',
+        recipients: ['teste@email.com'],
+        body: 'Uma mensagem de teste',
+        isHTML: false,
+      },
+      (error, event) => {
+        console.log(error)
+      }
+    )
   }
 
   return (
@@ -58,7 +73,7 @@ const Detail = () => {
             <ActionText>WhatsApp</ActionText>
           </Action>
 
-          <Action onPress={() => {}}>
+          <Action onPress={sendMail}>
             <ActionText>E-mail</ActionText>
           </Action>
         </Actions>
