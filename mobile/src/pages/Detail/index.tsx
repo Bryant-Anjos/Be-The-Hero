@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, TouchableOpacity } from 'react-native'
+import { Image, TouchableOpacity, Linking } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Feather'
 import Mailer from 'react-native-mail'
@@ -22,6 +22,7 @@ import logoImg from '../../assets/logo.png'
 
 const Detail = () => {
   const navigation = useNavigation()
+  const message = 'Uma mensagem de teste'
 
   function navigateBack() {
     navigation.goBack()
@@ -32,13 +33,17 @@ const Detail = () => {
       {
         subject: 'Mensagem de teste',
         recipients: ['teste@email.com'],
-        body: 'Uma mensagem de teste',
+        body: message,
         isHTML: false,
       },
       (error, event) => {
         console.log(error)
       }
     )
+  }
+
+  function sendWhasapp() {
+    Linking.openURL(`whatsapp://send?phone=5517992232920&text=${message}`)
   }
 
   return (
@@ -69,7 +74,7 @@ const Detail = () => {
         <HeroDescription>Entre em contato:</HeroDescription>
 
         <Actions>
-          <Action onPress={() => {}}>
+          <Action onPress={sendWhasapp}>
             <ActionText>WhatsApp</ActionText>
           </Action>
 
