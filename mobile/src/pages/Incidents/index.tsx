@@ -1,7 +1,10 @@
-import React from 'react'
-import { Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Image, FlatList } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Feather'
+
+import api from '../../services/api'
+import Incident from '../../interfaces/Incident'
 
 import {
   Container,
@@ -10,8 +13,7 @@ import {
   HeaderTextBold,
   Title,
   Description,
-  IncidentList,
-  Incident,
+  IncidentView,
   IncidentProperty,
   IncidentValue,
   DetailsButton,
@@ -21,44 +23,60 @@ import {
 import logoImg from '../../assets/logo.png'
 
 const Incidents = () => {
+  const [incidents, setIncidents] = useState<Incident[]>([])
+  const [total, setTotal] = useState(0)
+
   const navigation = useNavigation()
 
-  function navigateToDetail() {
-    navigation.navigate('Detail')
+  function navigateToDetail(incident: Incident) {
+    navigation.navigate('Detail', { incident })
   }
+
+  useEffect(() => {
+    api.get<Incident[]>('incidents').then((response) => {
+      setIncidents(response.data)
+      setTotal(response.headers['x-total-count'])
+    })
+  }, [])
 
   return (
     <Container>
       <Header>
         <Image source={logoImg} />
         <HeaderText>
-          Total de <HeaderTextBold>0 casos</HeaderTextBold>.
+          Total de <HeaderTextBold>{total} casos</HeaderTextBold>.
         </HeaderText>
       </Header>
 
       <Title>Bem vindo!</Title>
       <Description>Escolha um dos caso abaixo e salve o dia.</Description>
 
-      <IncidentList
-        data={[1, 2, 3, 4, 5]}
-        keyExtractor={(incident) => String(incident)}
+      <FlatList<Incident>
+        style={{ marginTop: 32 }}
+        data={incidents}
+        keyExtractor={(incident) => String(incident.id)}
         showsVerticalScrollIndicator={false}
-        renderItem={() => (
-          <Incident>
+        renderItem={({ item: incident }) => (
+          <IncidentView>
             <IncidentProperty>ONG:</IncidentProperty>
-            <IncidentValue>APAD</IncidentValue>
+            <IncidentValue>{incident.title}</IncidentValue>
 
             <IncidentProperty>CASO:</IncidentProperty>
-            <IncidentValue>Cadelinha atropelada</IncidentValue>
+            <IncidentValue>{incident.description}</IncidentValue>
 
             <IncidentProperty>VALOR:</IncidentProperty>
-            <IncidentValue>R$ 120,00</IncidentValue>
+            <IncidentValue>
+              {Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              }).format(incident.value)}
+            </IncidentValue>
 
-            <DetailsButton onPress={navigateToDetail}>
+            <DetailsButton onPress={() => navigateToDetail(incident)}>
               <DetailsButtonText>Ver mais detalhes</DetailsButtonText>
               <Icon name="arrow-right" size={16} color="#e02041" />
             </DetailsButton>
-          </Incident>
+          </IncidentView>
         )}
       />
     </Container>

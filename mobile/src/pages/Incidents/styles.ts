@@ -1,6 +1,8 @@
 import styled from 'styled-components/native'
 import { FlatList } from 'react-native'
 
+import Incident from '../../interfaces/Incident'
+
 export const Container = styled.SafeAreaView`
   flex: 1;
   padding: 0 24px;
@@ -36,10 +38,7 @@ export const Description = styled.Text`
   color: #737380;
 `
 
-export const IncidentList = styled(FlatList)`
-  margin-top: 32px;
-`
-export const Incident = styled.View`
+export const IncidentView = styled.View`
   padding: 24px;
   border-radius: 8px;
   background-color: #fff;

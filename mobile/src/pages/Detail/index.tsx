@@ -1,13 +1,16 @@
 import React from 'react'
 import { Image, TouchableOpacity, Linking } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Feather'
 import Mailer from 'react-native-mail'
+
+import Incident from '../../interfaces/Incident'
+import Ong from '../../interfaces/Ong'
 
 import {
   Container,
   Header,
-  Incident,
+  IncidentView,
   IncidentProperty,
   IncidentValue,
   ContactBox,
@@ -20,9 +23,23 @@ import {
 
 import logoImg from '../../assets/logo.png'
 
+type DetailScreenRouteProp = {
+  incident: { incident: Incident & Ong }
+}
+
 const Detail = () => {
   const navigation = useNavigation()
-  const message = 'Uma mensagem de teste'
+  const route = useRoute<RouteProp<DetailScreenRouteProp, 'incident'>>()
+
+  const { incident } = route.params
+  const message = `Olá ${
+    incident.name
+  }, estou entrando em contato pois gostaria de ajudar no caso "${
+    incident.title
+  }" com o valor de ${Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(incident.value)}`
 
   function navigateBack() {
     navigation.goBack()
@@ -31,19 +48,21 @@ const Detail = () => {
   function sendMail() {
     Mailer.mail(
       {
-        subject: 'Mensagem de teste',
-        recipients: ['teste@email.com'],
+        subject: `Herói do caso ${incident.name}`,
+        recipients: [incident.email],
         body: message,
         isHTML: false,
       },
-      (error, event) => {
-        console.log(error)
+      (err) => {
+        console.log(err)
       }
     )
   }
 
   function sendWhasapp() {
-    Linking.openURL(`whatsapp://send?phone=5517992232920&text=${message}`)
+    Linking.openURL(
+      `whatsapp://send?phone=${incident.whatsapp}&text=${message}`
+    )
   }
 
   return (
@@ -56,16 +75,23 @@ const Detail = () => {
         </TouchableOpacity>
       </Header>
 
-      <Incident>
+      <IncidentView>
         <IncidentProperty style={{ marginTop: 0 }}>ONG:</IncidentProperty>
-        <IncidentValue>APAD</IncidentValue>
+        <IncidentValue>
+          {incident.name} de {incident.city}/{incident.uf}
+        </IncidentValue>
 
         <IncidentProperty>CASO:</IncidentProperty>
-        <IncidentValue>Cadelinha atropelada</IncidentValue>
+        <IncidentValue>{incident.title}</IncidentValue>
 
         <IncidentProperty>VALOR:</IncidentProperty>
-        <IncidentValue>R$ 120,00</IncidentValue>
-      </Incident>
+        <IncidentValue>
+          {Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(incident.value)}
+        </IncidentValue>
+      </IncidentView>
 
       <ContactBox>
         <HeroTitle>Salve o dia!</HeroTitle>

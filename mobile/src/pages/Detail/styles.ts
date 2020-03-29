@@ -12,7 +12,7 @@ export const Header = styled.View`
   align-items: center;
 `
 
-export const Incident = styled.View`
+export const IncidentView = styled.View`
   padding: 24px;
   border-radius: 8px;
   background-color: #fff;
