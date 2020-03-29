@@ -1,0 +1,12 @@
+{
+  "name": "Be The Hero",
+  "displayName": "bethehero",
+  "platforms": ["android"],
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+  }
+}
