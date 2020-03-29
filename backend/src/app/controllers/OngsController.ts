@@ -1,6 +1,6 @@
-import { Request, Response, response } from 'express'
-import crypto from 'crypto'
+import { Request, Response } from 'express'
 
+import generateUniqueId from '../../utils/generateUniqueId'
 import connection from '../../database/connection'
 
 import Ong from '../interfaces/Ong'
@@ -9,7 +9,7 @@ class OngsController {
   async create(req: Request, res: Response): Promise<Response<{ id: string }>> {
     const { name, email, whatsapp, city, uf }: Ong = req.body
 
-    const id = crypto.randomBytes(8).toString('HEX')
+    const id = generateUniqueId()
 
     await connection('ongs').insert({
       id,
