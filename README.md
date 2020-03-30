@@ -1,3 +1,7 @@
+<h1 align="center">
+  <img type="image/svg+xml" src="https://github.com/Bryant-Anjos/Be-The-Hero/blob/master/frontend/src/assets/logo.svg" />
+</h1>
+
 # Be The Hero - 11th Omnistack Week Project
 
 In this repository there are the source code of the project did at [Rocketseat's](https://rocketseat.com.br) 11th Omnistack Week.
